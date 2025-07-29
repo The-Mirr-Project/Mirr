@@ -1,10 +1,10 @@
 import "../config.js";
 
-function $mirr$fetch(url, headers) {
+function $mirr$fetch(url, init) {
   let rewritten;
-
-  let prefix =
-    url.startsWith("https:") || url.startsWith("http:")
+  const prefix = url.startsWith("https:")
+    ? "http"
+    : url.startsWith("http:")
       ? "http"
       : url.startsWith("//")
         ? "scheme-relative"
@@ -25,14 +25,19 @@ function $mirr$fetch(url, headers) {
       rewritten = location.origin + $mirr.prefix + $mirr$location.origin + url;
       break;
 
-    case "other":
-      rewritten =
-        location.origin + $mirr.prefix + "https://" + $mirr$location.href + url;
+    case "other": {
+      const base = new URL($mirr$location.href);
+      rewritten = location.origin + $mirr.prefix + new URL(url, base).href;
       break;
+    }
   }
 
   console.log(`Fetching ${rewritten} ($mirr$fetch)`);
-  return fetch(rewritten, headers);
+
+  // Force redirect: 'follow' to fix no-cors redirect issues:
+  const fetchInit = { ...init, redirect: "follow" };
+
+  return fetch(rewritten, fetchInit);
 }
 
 export { $mirr$fetch };

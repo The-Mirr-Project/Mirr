@@ -63,7 +63,17 @@ let $mirr$location = {
     return $mirrHelpers.proxiedHref;
   },
   set href(x) {
-    location.href = location.origin + $mirr.prefix + x;
+    if (x.startsWith("https:") || x.startsWith("http:")) {
+      location.href = location.origin + $mirr.prefix + x;
+    } else if (x.startsWith("//")) {
+      location.href = location.origin + $mirr.prefix + "https://" + x.slice(3);
+    } else if (x.startsWith("/")) {
+      location.href =
+        location.origin + $mirr.prefix + $mirr$location.origin + x;
+    } else {
+      const resolved = new URL(x, $mirr$location.href).href;
+      location.href = location.origin + $mirr.prefix + resolved;
+    }
   },
 
   get origin() {

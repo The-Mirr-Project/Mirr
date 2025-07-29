@@ -42,8 +42,12 @@ function rewriteJavascript(jsinput) {
           return;
         }
       }
-
-      // navigator  $mirr$navigator
+      // location -> $mirr$location
+      if (node.type === "Identifier" && node.name === "location") {
+        node.name = "$mirr$location";
+        return;
+      }
+      // navigator  -> $mirr$navigator
       if (node.type === "Identifier" && node.name === "navigator") {
         node.name = "$mirr$navigator";
         return;

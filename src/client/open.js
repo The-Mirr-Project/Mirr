@@ -1,4 +1,4 @@
-import $mirr from "../config.js";
+import { $mirr } from "../config.js";
 
 function $mirr$open(url, target, windowFeatures) {
   let prefix = url.startsWith("/")
@@ -24,4 +24,4 @@ function $mirr$open(url, target, windowFeatures) {
   open(url, target, windowFeatures);
 }
 
-export default $mirr$open;
+export { $mirr$open };

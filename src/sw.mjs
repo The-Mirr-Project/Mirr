@@ -16,14 +16,10 @@ async function handleRequest(request) {
     const url = new URL(request.url);
 
     if (url.pathname.startsWith($mirr.prefix)) {
-      const targetUrl = decodeURIComponent(
-        url.pathname.slice($mirr.prefix.length),
-      );
-
-      if (!/^https?:\/\//.test(targetUrl)) {
-        return new Response("Invalid target URL", { status: 400 });
-      }
-
+      const targetUrl =
+        decodeURIComponent(url.pathname.slice($mirr.prefix.length)) +
+        url.search;
+      console.log(`Fetching ${targetUrl} using baremux`);
       const response = await client.fetch(targetUrl);
       const mime = response.headers.get("Content-Type") || "";
 
@@ -46,7 +42,6 @@ async function handleRequest(request) {
           "upgrade-insecure-requests",
       );
       headers.set("X-Frame-Options", "SAMEORIGIN");
-
       if (
         mime.includes("text/html") ||
         mime.includes("application/xhtml+xml")
