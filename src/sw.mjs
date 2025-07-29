@@ -19,7 +19,7 @@ async function handleRequest(request) {
       const targetUrl =
         decodeURIComponent(url.pathname.slice($mirr.prefix.length)) +
         url.search;
-      console.log(`Fetching ${targetUrl} using baremux`);
+      console.log(`Fetching ${targetUrl} using wisp`);
       const response = await client.fetch(targetUrl);
       const mime = response.headers.get("Content-Type") || "";
 
