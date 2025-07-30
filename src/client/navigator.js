@@ -44,25 +44,12 @@ const $mirr$navigator = {
   get maxTouchPoints() {
     return 0;
   },
-
-  get doNotTrack() {
-    return "1";
-  },
   get cookieEnabled() {
     return true;
   },
   get webdriver() {
     return false;
   },
-
-  get permissions() {
-    return {
-      query: async () => ({ state: "prompt" }),
-      request: async () => true,
-      revoke: async () => true,
-    };
-  },
-
   get clipboard() {
     return navigator.clipboard;
   },
@@ -149,10 +136,6 @@ const $mirr$navigator = {
   },
   get doNotTrack() {
     return "1";
-  },
-
-  get serviceWorker() {
-    return undefined;
   },
   get presentation() {
     return undefined;

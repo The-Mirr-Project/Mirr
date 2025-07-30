@@ -5,7 +5,7 @@
     <script>
         async function init() {
             const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
-            const wispUrl = "wss://nebulaservices.org/wisp/";
+            const wispUrl = "wss://wisp.mercurywork.shop/";
             await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
             navigator.serviceWorker.register("/sw.bundle.js")
         }
