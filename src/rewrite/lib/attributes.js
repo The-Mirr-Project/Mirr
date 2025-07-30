@@ -1,6 +1,24 @@
 import rewriteUrl from "./url.js";
 
-function rewriteAttributes(el, prefix, base, URL_ATTRS) {
+function rewriteAttributes(el, prefix, base) {
+  const URL_ATTRS = [
+    "href",
+    "src",
+    "srcset",
+    "action",
+    "formaction",
+    "poster",
+    "data",
+    "ping",
+    "longdesc",
+    "background",
+    "cite",
+    "xlink:href",
+    "usemap",
+    "archive",
+    "codebase",
+    "style",
+  ];
   for (const attr of URL_ATTRS) {
     if (!el.hasAttribute?.(attr)) continue;
     const val = el.getAttribute(attr);

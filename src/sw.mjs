@@ -1,4 +1,3 @@
-//import "./serverClient.js";
 import "./config.js";
 import rewriteHtml from "./rewrite/html.js";
 import rewriteJavascript from "./rewrite/js.js";
@@ -19,11 +18,34 @@ async function handleRequest(request) {
       const targetUrl =
         decodeURIComponent(url.pathname.slice($mirr.prefix.length)) +
         url.search;
-      console.log(`Fetching ${targetUrl} using wisp`);
-      const response = await client.fetch(targetUrl);
+      console.log(`[SW] fetched ${targetUrl}`);
+
+      const spoofedHeaders = new Headers();
+      // yoinked from the tor browser
+      spoofedHeaders.set(
+        "User-Agent",
+        "Mozilla/5.0 (Windows NT 10.0; rv:115.0) Gecko/20100101 Firefox/115.0",
+      );
+      spoofedHeaders.set("Connection", "keep-alive");
+      spoofedHeaders.set("Upgrade-Insecure-Requests", "1");
+      spoofedHeaders.set(
+        "Accept",
+        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+      );
+      spoofedHeaders.set("Accept-Language", "en-US,en;q=0.5");
+      spoofedHeaders.set("Accept-Encoding", "gzip, deflate, br");
+
+      const response = await client.fetch(targetUrl, {
+        headers: spoofedHeaders,
+      });
+
       const mime = response.headers.get("Content-Type") || "";
 
+      // Clone original headers so we can modify them
       const headers = new Headers(response.headers);
+
+      // Add/overwrite security headers
+      headers.set("X-Frame-Options", "SAMEORIGIN");
       headers.set(
         "Content-Security-Policy",
         "default-src 'self'; " +
@@ -41,11 +63,12 @@ async function handleRequest(request) {
           "block-all-mixed-content; " +
           "upgrade-insecure-requests",
       );
-      headers.set("X-Frame-Options", "SAMEORIGIN");
+
       if (
         mime.includes("text/html") ||
         mime.includes("application/xhtml+xml")
       ) {
+        // buffer so rewriting isn't a pain
         const text = await response.text();
         const rewritten = rewriteHtml(text, url);
         return new Response(rewritten, { headers });
@@ -55,14 +78,21 @@ async function handleRequest(request) {
         mime.includes("application/javascript") ||
         mime.includes("text/javascript")
       ) {
+        // buffer so rewriting isn't a pain
         const text = await response.text();
         const rewritten = rewriteJavascript(text, url);
         return new Response(rewritten, { headers });
       }
 
-      const raw = await response.arrayBuffer();
-      return new Response(raw, { headers });
+      // stream the response body directly
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers,
+      });
     }
+
+    // For requests outside proxy prefix, just passthrough
     return fetch(request);
   } catch (e) {
     return new Response("Fetch failed: " + e, {

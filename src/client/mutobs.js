@@ -1,24 +1,5 @@
 import rewriteAttributes from "../rewrite/lib/attributes.js";
 function initMutObs() {
-  const URL_ATTRS = [
-    "href",
-    "src",
-    "srcset",
-    "action",
-    "formaction",
-    "poster",
-    "data",
-    "ping",
-    "longdesc",
-    "background",
-    "cite",
-    "xlink:href",
-    "usemap",
-    "archive",
-    "codebase",
-    "style",
-  ];
-
   const prefix = $mirr.prefix;
   const base = new URL($mirr$location.href);
 
@@ -27,10 +8,10 @@ function initMutObs() {
       for (const node of mutation.addedNodes) {
         if (!(node instanceof HTMLElement)) continue;
 
-        rewriteAttributes(node, prefix, base, URL_ATTRS);
+        rewriteAttributes(node, prefix, base);
         const descendants = node.querySelectorAll?.("*") ?? [];
         for (const el of descendants) {
-          rewriteAttributes(el, prefix, base, URL_ATTRS);
+          rewriteAttributes(el, prefix, base);
         }
       }
     }
