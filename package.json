@@ -9,6 +9,7 @@
     "estree-walker": "^3.0.3",
     "express": "^5.1.0",
     "htmlparser2": "^10.0.0",
+    "idb": "^8.0.3",
     "install": "^0.13.0",
     "libcurl.js": "^0.7.1",
     "meriyah": "^6.1.4",

@@ -68,7 +68,7 @@ async function handleRequest(request) {
         mime.includes("text/html") ||
         mime.includes("application/xhtml+xml")
       ) {
-        // buffer so rewriting isn't a pain
+        // Buffer and rewrite HTML bodies
         const text = await response.text();
         const rewritten = rewriteHtml(text, url);
         return new Response(rewritten, { headers });
@@ -78,13 +78,14 @@ async function handleRequest(request) {
         mime.includes("application/javascript") ||
         mime.includes("text/javascript")
       ) {
-        // buffer so rewriting isn't a pain
+        // Buffer and rewrite JS bodies
         const text = await response.text();
         const rewritten = rewriteJavascript(text, url);
         return new Response(rewritten, { headers });
       }
 
-      // stream the response body directly
+      // For all other content types (images, binaries, downloads, etc),
+      // stream the response body directly without buffering
       return new Response(response.body, {
         status: response.status,
         statusText: response.statusText,
