@@ -10,7 +10,10 @@ function rewriteUrl(url, prefix, base) {
     return "javascript:" + rewriteJavascript(jsCode);
   }
 
-  if (trimmed.toLowerCase().startsWith("mailto:") || trimmed.toLowerCase().startsWith("tel:")) {
+  if (
+    trimmed.toLowerCase().startsWith("mailto:") ||
+    trimmed.toLowerCase().startsWith("tel:")
+  ) {
     return trimmed;
   }
   if (
@@ -30,6 +33,5 @@ function rewriteUrl(url, prefix, base) {
     return trimmed;
   }
 }
-
 
 export default rewriteUrl;

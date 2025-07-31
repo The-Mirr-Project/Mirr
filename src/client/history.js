@@ -29,4 +29,4 @@ let $mirr$history = {
   },
 };
 
-export { $mirr$history }
+export { $mirr$history };

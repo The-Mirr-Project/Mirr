@@ -7,8 +7,8 @@ const pairs = {
   location: "$mirr$location",
   open: "$mirr$open",
   navigator: "$mirr$navigator",
-  history: "$mirr$history"
-}
+  history: "$mirr$history",
+};
 
 function rewriteJavascript(code) {
   const ast = parseScript(code, { next: true, loc: false });
@@ -27,9 +27,11 @@ function rewriteJavascript(code) {
           (parent?.type == "FunctionExpression" && parent.id == node) ||
           (parent?.type == "ClassDeclaration" && parent.id == node) ||
           (parent?.type == "ClassExpression" && parent.id == node) ||
-          (parent?.type == "Property" && parent.key == node && !parent.computed) ||
-          (parent?.type == "ImportSpecifier") ||
-          (parent?.type == "ObjectPattern") ||
+          (parent?.type == "Property" &&
+            parent.key == node &&
+            !parent.computed) ||
+          parent?.type == "ImportSpecifier" ||
+          parent?.type == "ObjectPattern" ||
           (parent?.type == "Property" && parent.parent?.type == "ObjectPattern")
         ) {
           return;
@@ -48,17 +50,16 @@ function rewriteJavascript(code) {
       ) {
         const name = node.property.name;
         if (Object.hasOwn(pairs, name)) {
-          node.type = "Identifier";       
+          node.type = "Identifier";
           node.name = pairs[name];
           delete node.object;
           delete node.property;
         }
       }
-    }
+    },
   });
 
   return generate(ast);
 }
 
-
-export default rewriteJavascript
+export default rewriteJavascript;
