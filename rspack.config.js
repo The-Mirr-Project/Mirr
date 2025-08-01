@@ -4,6 +4,7 @@ const fnConfig = {
   devtool: false, 
   name: "client",
   target: "web",
+  "sideEffects": true,
   entry: {
     functions: "./src/client.js",
   },
