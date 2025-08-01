@@ -11,13 +11,16 @@ function rewriteScript(el) {
 }
 
 function rewriteOnAttr(el) {
-  [...el.attributes].forEach(attr => {
+  [...el.attributes].forEach((attr) => {
     if (!attr.name.startsWith("on")) return;
     try {
       el.setAttribute(attr.name, rewriteJavascript(attr.value));
       console.log("[MutObs] Rewrote Javascript for on* event");
     } catch (e) {
-      console.warn(`[MutObs] Failed to rewrite inline event handler ${attr.name}:`, e);
+      console.warn(
+        `[MutObs] Failed to rewrite inline event handler ${attr.name}:`,
+        e,
+      );
     }
   });
 }
