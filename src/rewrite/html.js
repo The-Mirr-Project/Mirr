@@ -22,7 +22,7 @@ function rewriteHtml(html, requestUrl) {
   const prefix = globalThis.$mirr.prefix;
 
   const dom = parseDocument(html);
-  const nodes = DomUtils.findAll(() => true, dom.children);
+  const nodes = DomUtils.findAll(() => true, dom, true);
 
   for (const node of nodes) {
     rewriteAttributes(node, prefix, base);

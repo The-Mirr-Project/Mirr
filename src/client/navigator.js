@@ -45,7 +45,7 @@ const $mirr$navigator = {
     return 0;
   },
   get cookieEnabled() {
-    return true;
+    return false; //for now
   },
   get webdriver() {
     return false;

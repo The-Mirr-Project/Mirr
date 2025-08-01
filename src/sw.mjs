@@ -41,10 +41,10 @@ async function handleRequest(request) {
 
       const mime = response.headers.get("Content-Type") || "";
 
-      // Clone original headers so we can modify them
+      // clone headers so they can be modified
       const headers = new Headers(response.headers);
 
-      // Add/overwrite security headers
+      // csp to prevent IP leaks (also get rid of x frame options so embedding works)
       headers.set("X-Frame-Options", "SAMEORIGIN");
       headers.set(
         "Content-Security-Policy",
