@@ -50,7 +50,6 @@ function rewriteHtml(html, requestUrl) {
           try {
             node.attribs[attr] = rewriteJavascript(node.attribs[attr]);
             console.log("[SW] Rewrote JS for an on* event");
-            console.logg();
           } catch (e) {
             console.warn(`[SW] JS rewrite failed for an on* event ${attr}:`, e);
           }

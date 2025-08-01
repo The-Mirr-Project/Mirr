@@ -78,7 +78,7 @@ let $mirr$cookies = {
   },
 };
 
-export const patchCookie = () => {
+const patchCookie = () => {
   Object.defineProperty(document, "cookie", {
     get: () => $mirr$cookies.cookie,
     set: v => { $mirr$cookies.cookie = v },
@@ -87,4 +87,4 @@ export const patchCookie = () => {
   });
 };
 
-
+export {patchCookie}
