@@ -17,6 +17,7 @@ function rewriteAttributes(el, prefix, base) {
     "usemap",
     "archive",
     "codebase",
+    "content",
     "style",
   ];
 
