@@ -1,15 +1,17 @@
+// yes 
+import { BareClient } from "@mercuryworkshop/bare-mux";
+
 function patchWebSocket() {
-    const ogSocket = window.WebSocket;
+    const client = new BareClient();
+    const originalCreate = client.createWebSocket.bind(client);
 
-    class patched extends ogSocket {
-        constructor(url, protocols) {
-            const newUrl = $mirr.prefix + url
-            
-            super(newUrl, protocols)
-        }
-    }
+    window.WebSocket = function(url, protocols) {
+        return originalCreate(url, protocols);
+    };
 
-    window.WebSocket = patched;
+    // copy static constants
+    Object.keys(WebSocket).forEach(k => window.WebSocket[k] = WebSocket[k]);
 }
+
 
 export { patchWebSocket };
