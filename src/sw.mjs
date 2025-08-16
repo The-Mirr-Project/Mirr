@@ -54,7 +54,6 @@ async function handleRequest(request) {
           "style-src-elem 'self' 'unsafe-inline'; " +
           "font-src 'self'; " +
           "img-src 'self' data:; " +
-          "connect-src 'self'; " +
           "object-src 'self'; " +
           "base-uri 'self'; " +
           "form-action 'self'; " +
