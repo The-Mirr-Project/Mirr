@@ -8,22 +8,24 @@ const pairs = {
   open: "$mirr$open",
   navigator: "$mirr$navigator",
   history: "$mirr$history",
-  eval: "$mirr$eval"
+  eval: "$mirr$eval",
 };
 
 const globals = ["window", "globalThis", "top"];
 
-function rewriteJavascript(code) {
+export default function rewriteJavascript(code) {
   const ast = parseScript(code, { next: true, loc: false });
   const aliases = new Map(); // aliases for globals and such
+  
   walk(ast, {
     enter(node, parent) {
-      // track aliases
+      // since some sites use debuggers to be a pain in the ass, remove them
       if (node.type === "DebuggerStatement") {
-        this.remove();
-        return
-      };
+        this.replace({ type: "EmptyStatement" });
+        return;
+      }
 
+      // track aliases ( const x = window; for example)
       if (
         node.type === "VariableDeclarator" &&
         node.init?.type === "Identifier" &&
@@ -33,66 +35,78 @@ function rewriteJavascript(code) {
         return;
       }
 
-      // skip it if it shouldnt be rewritten
-      if (node.type === "Identifier" && Object.hasOwn(pairs, node.name)) {
-        const isDeclaration =
-          (parent?.type === "VariableDeclarator" && parent.id === node) ||
-          (parent?.type === "FunctionDeclaration" && parent.id === node) ||
-          (parent?.type === "FunctionExpression" && parent.id === node) ||
-          (parent?.type === "ClassDeclaration" && parent.id === node) ||
-          (parent?.type === "ClassExpression" && parent.id === node) ||
-          parent?.type === "ImportSpecifier" ||
-          parent?.type === "ImportDefaultSpecifier" ||
-          parent?.type === "ImportNamespaceSpecifier" ||
-          parent?.type === "ExportSpecifier" ||
-          (parent?.type === "Property" &&
-            parent.key === node &&
-            !parent.computed) ||
-          parent?.type === "ObjectPattern" ||
-          (parent?.type === "Property" &&
-            parent.parent?.type === "ObjectPattern");
-
-        if (!isDeclaration) {
-          node.name = pairs[node.name];
+      // function calls (fetch -> $mirr$fetch, for example)
+      if (node.type === "CallExpression") {
+        if (node.callee.type === "Identifier") {
+          const name = node.callee.name;
+          const original = aliases.get(name) || name;
+          if (globals.includes(original) && Object.hasOwn(pairs, original)) {
+            node.callee.name = pairs[original];
+          }
+        } else if (
+          node.callee.type === "MemberExpression" &&
+          !node.callee.computed &&
+          node.callee.object.type === "Identifier"
+        ) {
+          const base =
+            aliases.get(node.callee.object.name) || node.callee.object.name;
+          const prop = node.callee.property.name;
+          if (globals.includes(base) && Object.hasOwn(pairs, prop)) {
+            node.callee.property.name = pairs[prop];
+          }
         }
         return;
       }
 
-      // window.location, globalThis.open, etc.
-      if (
-        node.type === "MemberExpression" &&
-        !node.computed &&
-        node.object.type === "Identifier" &&
-        node.property.type === "Identifier"
-      ) {
-        const name = aliases.get(node.object.name) || node.object.name;
-        const prop = node.property.name;
+      // Rewrite identifiers only if they are globals or aliases
+      if (node.type === "Identifier") {
+        const original = aliases.get(node.name) || node.name;
+        if (Object.hasOwn(pairs, original)) {
+          const isDeclaration =
+            (parent?.type === "VariableDeclarator" && parent.id === node) ||
+            (parent?.type === "FunctionDeclaration" && parent.id === node) ||
+            (parent?.type === "FunctionExpression" && parent.id === node) ||
+            (parent?.type === "ClassDeclaration" && parent.id === node) ||
+            (parent?.type === "ClassExpression" && parent.id === node) ||
+            parent?.type?.startsWith("Import") ||
+            parent?.type?.startsWith("Export") ||
+            (parent?.type === "Property" &&
+              parent.key === node &&
+              !parent.computed) ||
+            parent?.type === "ObjectPattern";
 
-        if (globals.includes(name) && Object.hasOwn(pairs, prop)) {
-          this.replace({
-            type: "Identifier",
-            name: pairs[prop],
-          });
+          if (!isDeclaration && globals.includes(original)) {
+            node.name = pairs[original];
+          }
         }
         return;
       }
 
-      // Rewrite w["location"] → $mirr$location
+      // rewrite *ONLY* if base is a global
       if (
         node.type === "MemberExpression" &&
-        node.computed &&
-        node.object.type === "Identifier" &&
-        node.property.type === "Literal" &&
-        typeof node.property.value === "string"
+        node.object.type === "Identifier"
       ) {
-        const name = aliases.get(node.object.name) || node.object.name;
-        const prop = node.property.value;
+        const base = aliases.get(node.object.name) || node.object.name;
 
-        if (globals.includes(name) && Object.hasOwn(pairs, prop)) {
-          this.replace({
-            type: "Identifier",
-            name: pairs[prop],
-          });
+        // window.open -> $mirr$open
+        if (!node.computed && node.property.type === "Identifier") {
+          const prop = node.property.name;
+          if (globals.includes(base) && Object.hasOwn(pairs, prop)) {
+            node.property.name = pairs[prop];
+          }
+        }
+
+        // window["open"] -> $mirr$open
+        if (
+          node.computed &&
+          node.property.type === "Literal" &&
+          typeof node.property.value === "string"
+        ) {
+          const prop = node.property.value;
+          if (globals.includes(base) && Object.hasOwn(pairs, prop)) {
+            this.replace({ type: "Identifier", name: pairs[prop] });
+          }
         }
       }
     },
@@ -100,5 +114,3 @@ function rewriteJavascript(code) {
 
   return generate(ast);
 }
-
-export default rewriteJavascript;

@@ -5,7 +5,7 @@ import { $mirr$navigator } from "./client/navigator.js";
 import { $mirr$history } from "./client/history.js";
 
 import { patchCookie } from "./client/cookie.js";
-import { patchWebSocket } from "./client/websocket.js"
+import { patchWebSocket } from "./client/websocket.js";
 import { initMutObs } from "./client/mutobs.js";
 
 Object.assign(globalThis, {
