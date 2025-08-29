@@ -8,6 +8,7 @@ const pairs = {
   open: "$mirr$open",
   navigator: "$mirr$navigator",
   history: "$mirr$history",
+  eval: "$mirr$eval"
 };
 
 const globals = ["window", "globalThis", "top"];
@@ -18,6 +19,11 @@ function rewriteJavascript(code) {
   walk(ast, {
     enter(node, parent) {
       // track aliases
+      if (node.type === "DebuggerStatement") {
+        this.remove();
+        return
+      };
+
       if (
         node.type === "VariableDeclarator" &&
         node.init?.type === "Identifier" &&
