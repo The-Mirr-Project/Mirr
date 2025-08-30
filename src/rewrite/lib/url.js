@@ -1,4 +1,4 @@
-import rewriteJavascript from "../js.js";
+import rewriteJavascript from "../javascript/main.js";
 
 function rewriteUrl(url, prefix, base) {
   if (!url || typeof url !== "string") return url;

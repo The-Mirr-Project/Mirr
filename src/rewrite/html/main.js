@@ -1,7 +1,7 @@
 import { parseDocument, DomUtils } from "htmlparser2";
 import serialize from "dom-serializer";
-import rewriteAttributes from "./lib/attributes.js";
-import rewriteJavascript from "./js.js";
+import rewriteAttributes from "../lib/attributes.js";
+import rewriteJavascript from "../javascript/main.js";
 
 function getOrigin(requestUrl) {
   if (!requestUrl.pathname.startsWith(globalThis.$mirr.prefix)) return null;
@@ -26,7 +26,6 @@ function rewriteHtml(html, requestUrl) {
 
   for (const node of nodes) {
     rewriteAttributes(node, prefix, base);
-
     // Inline <script> rewriting
     if (
       node.name === "script" &&

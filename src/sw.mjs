@@ -1,6 +1,6 @@
 import "./config.js";
-import rewriteHtml from "./rewrite/html.js";
-import rewriteJavascript from "./rewrite/js.js";
+import rewriteHtml from "./rewrite/html/main.js";
+import rewriteJavascript from "./rewrite/javascript/main.js";
 
 import { BareClient } from "@mercuryworkshop/bare-mux";
 

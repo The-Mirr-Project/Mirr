@@ -1,5 +1,5 @@
 import rewriteAttributes from "../rewrite/lib/attributes.js";
-import rewriteJavascript from "../rewrite/js.js";
+import rewriteJavascript from "../rewrite/javascript/main.js";
 
 function rewriteScript(el) {
   const isInline = el.tagName?.toLowerCase() === "script" && !el.src;
