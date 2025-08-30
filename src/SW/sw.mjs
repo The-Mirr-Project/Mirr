@@ -1,7 +1,6 @@
-import "./config.js";
-import rewriteHtml from "./rewrite/html/main.js";
-import rewriteJavascript from "./rewrite/javascript/main.js";
-
+import "../config.js";
+import rewriteHtml from "../rewrite/html/main.js";
+import rewriteJavascript from "../rewrite/javascript/main.js";
 import { BareClient } from "@mercuryworkshop/bare-mux";
 
 self.addEventListener("fetch", (e) => {
@@ -20,23 +19,9 @@ async function handleRequest(request) {
         url.search;
       console.log(`[SW] fetched ${targetUrl}`);
 
-      const spoofedHeaders = new Headers();
-      // yoinked from the tor browser
-      spoofedHeaders.set(
-        "User-Agent",
-        "Mozilla/5.0 (Windows NT 10.0; rv:115.0) Gecko/20100101 Firefox/115.0",
-      );
-      spoofedHeaders.set("Connection", "keep-alive");
-      spoofedHeaders.set("Upgrade-Insecure-Requests", "1");
-      spoofedHeaders.set(
-        "Accept",
-        "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-      );
-      spoofedHeaders.set("Accept-Language", "en-US,en;q=0.5");
-      spoofedHeaders.set("Accept-Encoding", "gzip, deflate, br");
 
       const response = await client.fetch(targetUrl, {
-        headers: spoofedHeaders,
+        headers: new Headers(request.headers),
       });
 
       const mime = response.headers.get("Content-Type") || "";
@@ -49,6 +34,7 @@ async function handleRequest(request) {
       headers.set(
         "Content-Security-Policy",
         "default-src 'self'; " +
+        
           "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
           "style-src 'self' 'unsafe-inline'; " +
           "style-src-elem 'self' 'unsafe-inline'; " +

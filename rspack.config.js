@@ -22,7 +22,7 @@ const swConfig = {
   name: "sw",
   target: "webworker",
   entry: {
-    sw: "./src/sw.mjs",
+    sw: "./src/SW/sw.mjs",
   },
   output: {
     filename: "sw.bundle.js",

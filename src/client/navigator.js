@@ -1,38 +1,38 @@
 // yoinked from the tor browser
 const $mirr$navigator = {
   get appCodeName() {
-    return "Mozilla";
+    return navigator.appCodeName
   },
   get appName() {
-    return "Netscape";
+    return navigator.appName
   },
   get appVersion() {
-    return "5.0 (Windows NT 10.0; rv:115.0)";
+    navigator.appVersion
   },
   get userAgent() {
-    return "Mozilla/5.0 (Windows NT 10.0; rv:115.0) Gecko/20100101 Firefox/115.0";
+    return navigator.userAgent
   },
   get platform() {
-    return "Win32";
+    return navigator.platform
   },
   get product() {
-    return "Gecko";
+    return navigator.product
   },
   get productSub() {
-    return "20100101";
+    return navigator.productSub
   },
   get vendor() {
-    return "";
+    return navigator.vendor
   },
   get vendorSub() {
-    return "";
+    return navigator.vendorSub
   },
 
   get language() {
-    return "en-US";
+    return navigator.language
   },
   get languages() {
-    return ["en-US", "en"];
+    return navigator.languages
   },
 
   get hardwareConcurrency() {
@@ -86,7 +86,7 @@ const $mirr$navigator = {
   },
 
   get deprecatedRunAdAuctionEnforcesKAnonymity() {
-    return false;
+    return navigator.deprecatedRunAdAuctionEnforcesKAnonymity;
   },
 
   get plugins() {
@@ -102,16 +102,14 @@ const $mirr$navigator = {
 
   // Gamepads API - empty array
   get gamepads() {
-    return [];
+    return navigator.gamepads
   },
 
   get userAgentData() {
     return undefined;
   },
 
-  javaEnabled() {
-    return false;
-  },
+  javaEnabled: () => {return navigator.javaEnabled()},
 
   get devicePosture() {
     return undefined;
@@ -135,13 +133,13 @@ const $mirr$navigator = {
     return undefined;
   },
   get doNotTrack() {
-    return "1";
+    return navigator.doNotTrack
   },
   get presentation() {
-    return undefined;
+    return navigator.presentation
   },
   get webstore() {
-    return undefined;
+    return navigator.webstore
   },
   get permissions() {
     return {
@@ -151,7 +149,7 @@ const $mirr$navigator = {
     };
   },
   get serial() {
-    return undefined;
+    return navigator.serial
   },
   get clipboard() {
     return navigator.clipboard;
