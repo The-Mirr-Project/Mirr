@@ -1,4 +1,5 @@
 import "../config.js";
+import { $mirr } from "../config.js";
 
 const $mirr$fetch = (url, init) =>
   fetch(
@@ -14,4 +15,9 @@ const $mirr$fetch = (url, init) =>
     { ...init, redirect: "follow" },
   );
 
-export { $mirr$fetch };
+
+window.fetch = $mirr$fetch;
+globalThis.fetch = $mirr$fetch;
+self.fetch = $mirr$fetch;
+console.log("[CLIENT] patched fetch on window, globalThis, and self")
+export { $mirr$fetch};

@@ -3,15 +3,15 @@ import { walk } from "estree-walker";
 import { generate } from "astring";
 
 const pairs = {
-  fetch: "$mirr$fetch",
-  location: "$mirr$location",
-  open: "$mirr$open",
-  navigator: "$mirr$navigator",
-  history: "$mirr$history",
-  eval: "$mirr$eval",
+  fetch: "$mirr$fetch", // fetch is already monkeypatched but just for reasons, this is a good idea
+  location: "$mirr$location", // sandboxing purposes 
+  open: "$mirr$open", // sandboxing purposes 
+  navigator: "$mirr$navigator", // sandboxing + anti fingerprinting purposes 
+  history: "$mirr$history", // this is purely for asthetics 
+  eval: "$mirr$eval", // if eval is accessed, any random code can be run so usually its a great idea to not
 };
 
-const globals = ["window", "globalThis", "top"];
+const globals = ["window", "globalThis", "top", "parent", "self"]; // please make an issue if im missing something here i dont want leaks
 
 export default function rewriteJavascript(code) {
   const ast = parseScript(code, { next: true, loc: false });

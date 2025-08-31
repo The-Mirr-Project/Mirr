@@ -8,6 +8,7 @@ import { patchCookie } from "./client/cookie.js";
 import { patchWebSocket } from "./client/websocket.js";
 import { initMutObs } from "./client/mutobs.js";
 
+
 Object.assign(globalThis, {
   $mirr$fetch,
   $mirr$location,
