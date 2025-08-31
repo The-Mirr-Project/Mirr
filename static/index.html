@@ -7,7 +7,7 @@
             const connection = new BareMux.BareMuxConnection("/baremux/worker.js");
             const wispUrl = "wss://nebulaservices.org/wisp/";
             await connection.setTransport("/epoxy/index.mjs", [{ wisp: wispUrl }]);
-            navigator.serviceWorker.register("/sw.bundle.js")
+            navigator.serviceWorker.register("/sw.js")
         }
         
         if (document.readyState === "loading") {

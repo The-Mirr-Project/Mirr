@@ -3,10 +3,6 @@ import rewriteHtml from "../rewrite/html/main.js";
 import rewriteJavascript from "../rewrite/javascript/main.js";
 import { BareClient } from "@mercuryworkshop/bare-mux";
 
-self.addEventListener("fetch", (e) => {
-  e.respondWith(handleRequest(e.request));
-});
-
 async function handleRequest(request) {
   try {
     const client = new BareClient();
@@ -89,3 +85,5 @@ async function handleRequest(request) {
 }
 
 export { handleRequest };
+
+self.handleRequest = handleRequest
