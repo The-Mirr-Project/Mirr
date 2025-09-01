@@ -3,7 +3,6 @@ import { walk } from "estree-walker";
 import { generate } from "astring";
 
 const pairs = {
-  fetch: "$mirr$fetch", // fetch is already monkeypatched but just for reasons, this is a good idea
   location: "$mirr$location", // sandboxing purposes
   navigator: "$mirr$navigator", // sandboxing + anti fingerprinting purposes
   history: "$mirr$history", // this is purely for asthetics
