@@ -15,7 +15,6 @@ async function handleRequest(request) {
         url.search;
       console.log(`[SW] fetched ${targetUrl}`);
 
-
       const response = await client.fetch(targetUrl, {
         headers: new Headers(request.headers),
       });
@@ -30,7 +29,6 @@ async function handleRequest(request) {
       headers.set(
         "Content-Security-Policy",
         "default-src 'self'; " +
-        
           "script-src 'self' 'unsafe-inline' 'unsafe-eval'; " +
           "style-src 'self' 'unsafe-inline'; " +
           "style-src-elem 'self' 'unsafe-inline'; " +
@@ -86,4 +84,4 @@ async function handleRequest(request) {
 
 export { handleRequest };
 
-self.handleRequest = handleRequest
+self.handleRequest = handleRequest;

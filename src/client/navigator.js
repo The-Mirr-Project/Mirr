@@ -1,38 +1,38 @@
 // yoinked from the tor browser
 const $mirr$navigator = {
   get appCodeName() {
-    return navigator.appCodeName
+    return navigator.appCodeName;
   },
   get appName() {
-    return navigator.appName
+    return navigator.appName;
   },
   get appVersion() {
-    navigator.appVersion
+    navigator.appVersion;
   },
   get userAgent() {
-    return navigator.userAgent
+    return navigator.userAgent;
   },
   get platform() {
-    return navigator.platform
+    return navigator.platform;
   },
   get product() {
-    return navigator.product
+    return navigator.product;
   },
   get productSub() {
-    return navigator.productSub
+    return navigator.productSub;
   },
   get vendor() {
-    return navigator.vendor
+    return navigator.vendor;
   },
   get vendorSub() {
-    return navigator.vendorSub
+    return navigator.vendorSub;
   },
 
   get language() {
-    return navigator.language
+    return navigator.language;
   },
   get languages() {
-    return navigator.languages
+    return navigator.languages;
   },
 
   get hardwareConcurrency() {
@@ -102,14 +102,16 @@ const $mirr$navigator = {
 
   // Gamepads API - empty array
   get gamepads() {
-    return navigator.gamepads
+    return navigator.gamepads;
   },
 
   get userAgentData() {
     return undefined;
   },
 
-  javaEnabled: () => {return navigator.javaEnabled()},
+  javaEnabled: () => {
+    return navigator.javaEnabled();
+  },
 
   get devicePosture() {
     return undefined;
@@ -133,13 +135,13 @@ const $mirr$navigator = {
     return undefined;
   },
   get doNotTrack() {
-    return navigator.doNotTrack
+    return navigator.doNotTrack;
   },
   get presentation() {
-    return navigator.presentation
+    return navigator.presentation;
   },
   get webstore() {
-    return navigator.webstore
+    return navigator.webstore;
   },
   get permissions() {
     return {
@@ -149,7 +151,7 @@ const $mirr$navigator = {
     };
   },
   get serial() {
-    return navigator.serial
+    return navigator.serial;
   },
   get clipboard() {
     return navigator.clipboard;

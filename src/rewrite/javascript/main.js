@@ -4,10 +4,9 @@ import { generate } from "astring";
 
 const pairs = {
   fetch: "$mirr$fetch", // fetch is already monkeypatched but just for reasons, this is a good idea
-  location: "$mirr$location", // sandboxing purposes 
-  open: "$mirr$open", // sandboxing purposes 
-  navigator: "$mirr$navigator", // sandboxing + anti fingerprinting purposes 
-  history: "$mirr$history", // this is purely for asthetics 
+  location: "$mirr$location", // sandboxing purposes
+  navigator: "$mirr$navigator", // sandboxing + anti fingerprinting purposes
+  history: "$mirr$history", // this is purely for asthetics
   eval: "$mirr$eval", // if eval is accessed, any random code can be run so usually its a great idea to not
 };
 
@@ -16,7 +15,7 @@ const globals = ["window", "globalThis", "top", "parent", "self"]; // please mak
 export default function rewriteJavascript(code) {
   const ast = parseScript(code, { next: true, loc: false });
   const aliases = new Map(); // aliases for globals and such
-  
+
   walk(ast, {
     enter(node, parent) {
       // since some sites use debuggers to be a pain in the ass, remove them

@@ -1,8 +1,9 @@
 import "../config.js";
 import { $mirr } from "../config.js";
 
+let oldfetch = fetch;
 const $mirr$fetch = (url, init) =>
-  fetch(
+  oldfetch(
     location.origin +
       $mirr.prefix +
       (url.startsWith("https:") || url.startsWith("http:")
@@ -15,9 +16,8 @@ const $mirr$fetch = (url, init) =>
     { ...init, redirect: "follow" },
   );
 
-
 window.fetch = $mirr$fetch;
 globalThis.fetch = $mirr$fetch;
 self.fetch = $mirr$fetch;
-console.log("[CLIENT] patched fetch on window, globalThis, and self")
-export { $mirr$fetch};
+console.log("[CLIENT] patched fetch on window, globalThis, and self");
+export { $mirr$fetch };
